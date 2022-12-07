@@ -12,24 +12,32 @@ const (
 
 	OtelExporterJaegerProtocol = "OTEL_EXPORTER_JAEGER_PROTOCOL" //http/thrift.binary, grpc, udp/thrift.compact, udp/thrift.binary
 
-	SpanAttributes = "SPAN_ATTRIBUTES"
-	SpanName       = "SPAN_NAME"
-	SpanKind       = "SPAN_KIND"
-	SpanStatus     = "SPAN_STATUS"
+	OtelServiceName = "OTEL_SERVICE_NAME"
+
+	SpanAttributes     = "OTEL_SPAN_ATTRIBUTES"
+	SpanName           = "OTEL_SPAN_NAME"
+	SpanKind           = "OTEL_SPAN_KIND"
+	SpanStatus         = "OTEL_SPAN_STATUS"
+	SpanStatusMessage  = "OTEL_SPAN_STATUS_MESSAGE"
+	SpanDuration       = "OTEL_SPAN_DURATION_SEC" //duration in seconds
+	SpanLinkTraceId    = "OTEL_SPAN_LINK_TRACE_ID"
+	SpanLinkSpanId     = "OTEL_SPAN_LINK_SPAN_ID"
+	SpanLinkFlags      = "OTEL_SPAN_LINK_TRACE_FLAGS" //byte
+	SpanLinkRemote     = "OTEL_SPAN_LINK_REMOTE"      //true, false
+	SpanLinkAttributes = "OTEL_SPAN_LINK_ATTRIBUTES"  //same as span attributes
 )
 
 func GetExporter() (Exporter, error) {
 	exporter, ok := os.LookupEnv(OtelTracesExporter)
 
-	if !ok {
-		return "", ParameterError{fmt.Sprintf("%s must be provided. options are: %s", OtelTracesExporter, getExporters())}
+	if ok {
+		if !isValidExporter(exporter) {
+			return "", ParameterError{fmt.Sprintf("Invalid exporter: %s. valid options are: %s", exporter, getExporters())}
+		}
+		return Exporter(exporter), nil
 	}
 
-	if !isValidExporter(exporter) {
-		return "", ParameterError{fmt.Sprintf("Invalid exporter: %s. valid options are: %s", exporter, getExporters())}
-	}
-
-	return Exporter(exporter), nil
+	return OTLP, nil
 }
 
 func GetOtlpProtocol() (OtlpProtocol, error) {
@@ -42,7 +50,7 @@ func GetOtlpProtocol() (OtlpProtocol, error) {
 		return OtlpProtocol(protocol), nil
 	}
 
-	return HttpJson, nil
+	return GRPC, nil
 }
 
 func GetJaegerProtocol() (JaegerProtocol, error) {
@@ -66,21 +74,72 @@ func GetSpanName() string {
 	name := os.Getenv(SpanName)
 
 	if name == "" {
-		return "test-span"
+		return "Otelij debug span"
 	}
 
 	return name
 }
 
-func GetSpanStatus() (uint64, error) {
-	status, ok := os.LookupEnv(SpanStatus)
-	if !ok {
-		return 0, nil
-	}
+func GetSpanStatus() string {
+	return os.Getenv(SpanStatus)
+}
 
-	return strconv.ParseUint(status, 10, 32)
+func GetSpanStatusMessage() string {
+	return os.Getenv(SpanStatusMessage)
 }
 
 func GetSpanKind() string {
 	return os.Getenv(SpanKind)
+}
+
+func GetSpanDuration() (uint64, error) {
+	duration, ok := os.LookupEnv(SpanDuration)
+	if ok {
+		return strconv.ParseUint(duration, 10, 32)
+	}
+
+	return 1, nil
+}
+
+func GetServiceNameOrDefault() string {
+	service, ok := os.LookupEnv(OtelServiceName)
+	if !ok {
+		name := "Otelij debugger"
+		os.Setenv(OtelServiceName, "Otelij debugger")
+		return name
+	}
+
+	return service
+}
+
+func GetLinkTraceId() string {
+	return os.Getenv(SpanLinkTraceId)
+}
+
+func GetLinkSpanId() string {
+	return os.Getenv(SpanLinkSpanId)
+}
+
+func GetLinkFlags() (uint64, error) {
+	flags, ok := os.LookupEnv(SpanLinkFlags)
+
+	if ok {
+		return strconv.ParseUint(flags, 10, 8)
+	}
+
+	return 1, nil
+}
+
+func GetLinkRemote() (bool, error) {
+	remote, ok := os.LookupEnv(SpanLinkRemote)
+
+	if ok {
+		return strconv.ParseBool(remote)
+	}
+
+	return true, nil
+}
+
+func GetLinkAttributes() string {
+	return os.Getenv(SpanLinkAttributes)
 }
