@@ -48,7 +48,7 @@ func TestGetSpanName(t *testing.T) {
 	os.Unsetenv(SpanName)
 	name := GetSpanName()
 
-	assert.Equal(t, name, "test-span", "Expected to get default span name when no value exists.")
+	assert.Equal(t, "Otelij debug span", name, "Expected to get default span name when no value exists.")
 
 	os.Setenv(SpanName, TestName)
 	name = GetSpanName()

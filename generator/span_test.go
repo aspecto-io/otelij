@@ -14,7 +14,7 @@ func TestSpanGeneratedCorrectly(t *testing.T) {
 	os.Setenv(config.SpanKind, "server")
 	os.Setenv(config.SpanName, "best-span-ever")
 	os.Setenv(config.SpanAttributes, "first=one,second=two")
-	os.Setenv(config.SpanStatus, "2")
+	os.Setenv(config.SpanStatus, "OK")
 
 	spanGen := &SpanGenerator{}
 	data, err := spanGen.GenerateData(context.Background())
