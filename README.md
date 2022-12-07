@@ -2,10 +2,12 @@
 Open telemetry data generator (and exporter), currently only traces (spans) are supported
 
 ## How to run 
-You can run the app with docker as following 
+You can run the tool with docker as following
 ```
 docker run -e OTEL_TRACES_EXPORTER=otlp -e OTEL_EXPORTER_OTLP_PROTOCOL=grpc somedocker/docker:tag
 ```
+This will start the otel debugger, send a single span with the configured exporter, and terminate when exporting is settled
+
 > **Note**
 > 
 > In case you want to send spans to localhost, you can solve it with 2 options: 
@@ -13,13 +15,13 @@ docker run -e OTEL_TRACES_EXPORTER=otlp -e OTEL_EXPORTER_OTLP_PROTOCOL=grpc some
 > 2. Replace ```localhost``` (in the relevant endpoint) with ```host.docker.internal``` instead, eg: ```docker run -e OTEL_EXPORTER_OTLP_ENDPOINT==https://host.docker.internal:4317 somedocker/docker:tag```
 
 ## Exporting spans
-This exporter is using the same exporter env specification as described here: https://opentelemetry.io/docs/reference/specification/sdk-environment-variables/. 
+Otelij exporter is using the same exporter environment variables specification as described in [OpenTelemetry specification](https://opentelemetry.io/docs/reference/specification/sdk-environment-variables).
 In order to control the endpoint/protocol/headers/resources and other built in exporter stuff, you can just use the same env as you see in the specification.
 
 ### Usage
-In order to use this tool there are some env that you might need to pass: 
+In order to use this tool there are some environment variables that you might need to set: 
 1. ```OTEL_TRACES_EXPORTER``` **(optional)** - valid options are [otlp, jaeger, zipkin, stdout], default is otlp
-2. ```OTEL_EXPORTER_OTLP_PROTOCOL``` (optional) - valid options are [grpc, http/protobuf, http/json], default is grpc
+2. ```OTEL_EXPORTER_OTLP_PROTOCOL``` (optional [relevant for otlp exporter]) - valid options are [grpc, http/protobuf, http/json], default is grpc
 3. ```OTEL_EXPORTER_JAEGER_PROTOCOL``` (optional [relevant for jaeger exporter]) - valid options are [http/thrift.binary, udp/thrift.compact] - default is http/thrift.binary
 4. Dynamic span data (all optional):
    1. ```OTEL_SPAN_NAME``` - span name, regular string. default will be ```Otelij debug span```
@@ -27,7 +29,7 @@ In order to use this tool there are some env that you might need to pass:
    3. ```OTEL_SPAN_KIND``` - span kind, valid options are: [internal, server, client, producer, consumer]. default is internal
    4. ```OTEL_SPAN_STATUS``` - span status, valid options are: [Unset, Error, Ok]. default is Unset.
    5. ```OTEL_SPAN_STATUS_MESSAGE``` - free text for description of span status. default is empty.
-   6. ```OTEL_SPAN_DURATION_SEC``` - span duration to set in seconds. default is 1s.
+   6. ```OTEL_SPAN_DURATION_SEC``` - span duration to set in seconds. default is 1, usage as following OTEL_SPAN_DURATION_SEC=5.
    7. ```OTEL_SPAN_LINK_TRACE_ID``` - in case you want to link this span to another trace. default is none.
    8. ```OTEL_SPAN_LINK_SPAN_ID``` - span id to link to. default is none.
    9. ```OTEL_SPAN_LINK_TRACE_FLAGS``` - byte (currently only 1 bit to represent sampled/not sampled). default is 1.
@@ -48,7 +50,7 @@ docker run -e OTEL_TRACES_EXPORTER=otlp \
  somedocker/docker:tag
 ```
 
-otlp with http (can be protobuf or json)
+otlp with http/protobuf
 ```bash
 docker run -e OTEL_TRACES_EXPORTER=otlp \
  -e OTEL_EXPORTER_OTLP_ENDPOINT=https://my-endpoint.io:4318 \
@@ -69,7 +71,7 @@ docker run -e OTEL_TRACES_EXPORTER=otlp \
  -e OTEL_SERVICE_NAME=MyServiceName \
  -e OTEL_SPAN_NAME=TestSpan \
  -e OTEL_SPAN_KIND=server \
- -e OTEL_SPAN_STATUS=1 \
+ -e OTEL_SPAN_STATUS=OK \
  -e OTEL_SPAN_ATTRIBUTES=span.attr\=val1,span.attr2\=val2 \
  somedocker/docker:tag
 ```
