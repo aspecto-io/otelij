@@ -25,10 +25,10 @@ In order to use this tool there are some environment variables that you might ne
 2. ```OTEL_EXPORTER_OTLP_PROTOCOL``` (optional [relevant for otlp exporter]) - valid options are [grpc, http/protobuf, http/json], default is grpc
 3. ```OTEL_EXPORTER_JAEGER_PROTOCOL``` (optional [relevant for jaeger exporter]) - valid options are [http/thrift.binary, udp/thrift.compact] - default is http/thrift.binary
 4. Dynamic span data (all optional):
-   1. ```OTEL_SPAN_NAME``` - span name, regular string. default will be ```Otelij debug span```
+   1. ```OTEL_SPAN_NAME``` - string. default will be ```Otelij debug span```
    2. ```OTEL_SPAN_ATTRIBUTES``` - key values pair - comma delimited, e.g: ```attribute1=value1,attribute2=value2```. default is no attributes
    3. ```OTEL_SPAN_KIND``` - span kind, valid options are: [internal, server, client, producer, consumer]. default is internal
-   4. ```OTEL_SPAN_STATUS``` - span status, valid options are: [Unset, Error, Ok]. default is Unset.
+   4. ```OTEL_SPAN_STATUS``` - span status, valid options are: [unset, error, ok]. default is unset.
    5. ```OTEL_SPAN_STATUS_MESSAGE``` - free text for description of span status. default is empty.
    6. ```OTEL_SPAN_DURATION_SEC``` - span duration to set in seconds. default is 1, usage as following OTEL_SPAN_DURATION_SEC=5.
 5. Add link to another trace (optional)
@@ -73,7 +73,7 @@ docker run -e OTEL_TRACES_EXPORTER=otlp \
  -e OTEL_SERVICE_NAME=MyServiceName \
  -e OTEL_SPAN_NAME=TestSpan \
  -e OTEL_SPAN_KIND=server \
- -e OTEL_SPAN_STATUS=OK \
+ -e OTEL_SPAN_STATUS=ok \
  -e OTEL_SPAN_ATTRIBUTES=span.attr\=val1,span.attr2\=val2 \
  public.ecr.aws/x3s3n8k7/otelij
 ```
@@ -121,7 +121,7 @@ docker run -e OTEL_TRACES_EXPORTER=otlp \
  -e OTEL_SERVICE_NAME=MyServiceName \
  -e OTEL_SPAN_NAME=TestSpan \
  -e OTEL_SPAN_KIND=server \
- -e OTEL_SPAN_STATUS=OK \
+ -e OTEL_SPAN_STATUS=ok \
  -e OTEL_SPAN_ATTRIBUTES=span.attr\=val1,span.attr2\=val2 \
  -e OTEL_SPAN_LINK_SPAN_ID=d6583451bafe66cb \
  -e OTEL_SPAN_LINK_TRACE_ID=d18ae83289fb43df3f8570bcb5c3177c \
