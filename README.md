@@ -11,8 +11,8 @@ This will start the otel debugger, send a single span with the configured export
 > **Note**
 > 
 > In case you want to send spans to localhost, you can solve it with 2 options: 
-> 1. Add ```--network host``` to docker command, eg: ```docker run --network host somedocker/docker:tag```
-> 2. Replace ```localhost``` (in the relevant endpoint) with ```host.docker.internal``` instead, eg: ```docker run -e OTEL_EXPORTER_OTLP_ENDPOINT==https://host.docker.internal:4317 somedocker/docker:tag```
+> 1. Add ```--network host``` to docker command, e.g., ```docker run --network host somedocker/docker:tag```
+> 2. Replace ```localhost``` (in the relevant endpoint) with ```host.docker.internal``` instead, e.g., ```docker run -e OTEL_EXPORTER_OTLP_ENDPOINT==https://host.docker.internal:4317 somedocker/docker:tag```
 
 ## Exporting spans
 Otelij exporter is using the same exporter environment variables specification as described in [OpenTelemetry specification](https://opentelemetry.io/docs/reference/specification/sdk-environment-variables).
