@@ -26,7 +26,7 @@ In order to use this tool there are some environment variables that you might ne
 3. ```OTEL_EXPORTER_JAEGER_PROTOCOL``` (optional [relevant for jaeger exporter]) - valid options are [http/thrift.binary, udp/thrift.compact] - default is http/thrift.binary
 4. Dynamic span data (all optional):
    1. ```OTEL_SPAN_NAME``` - string. default will be ```Otelij debug span```
-   2. ```OTEL_SPAN_ATTRIBUTES``` - key values pair - comma delimited, e.g: ```attribute1=value1,attribute2=value2```. default is no attributes
+   2. ```OTEL_SPAN_ATTRIBUTES``` - key values pair - comma delimited, e.g., ```attribute1=value1,attribute2=value2```. default is no attributes
    3. ```OTEL_SPAN_KIND``` - span kind, valid options are: [internal, server, client, producer, consumer]. default is internal
    4. ```OTEL_SPAN_STATUS``` - span status, valid options are: [unset, error, ok]. default is unset.
    5. ```OTEL_SPAN_STATUS_MESSAGE``` - free text for description of span status. default is empty.
