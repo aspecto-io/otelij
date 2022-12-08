@@ -2,9 +2,9 @@ name: Push new Docker image
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   workflow_dispatch:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   deploy:
