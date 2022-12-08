@@ -10,7 +10,6 @@ import (
 )
 
 func main() {
-
 	ctx := context.Background()
 	otlpType := config.GetType()
 	handleRequest(ctx, otlpType)
@@ -45,5 +44,8 @@ func handleRequest(ctx context.Context, otlpType config.Type) {
 
 	if err != nil {
 		fmt.Println(fmt.Sprintf("Error while trying to export data: %s", err.Error()))
+		return
 	}
+
+	fmt.Println("Exported successfully.")
 }

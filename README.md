@@ -1,12 +1,13 @@
 # otelij
-Open telemetry data generator (and exporter), currently only traces (spans) are supported
-
+The purpose of this repo is to help debug OpenTelemetry by allowing to generate span an send it to an OpenTelemetry collector while having full control over the span and how it is sent (OTLP, Jaeger, HTTP, gRPC etc..)
 ## How to run 
-You can run the tool with docker as following
+To send a span you will need to run the following
 ```
 docker run -e OTEL_TRACES_EXPORTER=otlp -e OTEL_EXPORTER_OTLP_PROTOCOL=grpc public.ecr.aws/x3s3n8k7/otelij
 ```
-This will start the otel debugger, send a single span with the configured exporter, and terminate when exporting is settled
+This will start the otel debugger, send a single span with the configured exporter, and terminate when exporting is settled.  
+In case no error occurred you should see the following: ```Exported successfully.```.  
+In case of error, it would print the error message.
 
 > **Note**
 > 
